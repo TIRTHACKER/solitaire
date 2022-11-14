@@ -1,0 +1,796 @@
+@charset "UTF-8";
+@font-face {
+  src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/gothamrnd-medium.ttf");
+  font-family: "Gotham Rounded";
+}
+html, body {
+  font-family: "Gotham Rounded";
+  overflow: relative;
+	background: #0e8b44 url('https://bfa.github.io/solitaire-js/img/green_felt.jpg');
+	background-size: cover;
+	background-position: center;
+}
+canvas {
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+button {
+  color: #fff;
+  font-family: inherit;
+  font-weight: 500;
+  padding: 6px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+button:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+#container::after,
+.clearfix::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+#container {
+  height: 80vh;
+  width: 945px;
+  text-align: center;
+  margin: 10% auto;
+}
+
+#controls {
+  position: absolute;
+  width: 945px;
+  left: calc((100vw - 945px) / 2);
+  top: 0;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.3);
+  margin-top: 20px;
+  z-index: 100001;
+}
+
+#score {
+  color: #fff;
+  float: right;
+  padding: 6px 12px;
+}
+
+.columns {
+  width: 100%;
+}
+
+.column {
+  float: left;
+  position: relative;
+  width: 125px;
+  height: 187.5px;
+}
+
+.column .card:nth-child(1), .column .ghost:nth-child(1) {
+  top: 0px;
+  z-index: 11;
+}
+
+.column .card:nth-child(2), .column .ghost:nth-child(2) {
+  top: 25px;
+  z-index: 12;
+}
+
+.column .card:nth-child(3), .column .ghost:nth-child(3) {
+  top: 50px;
+  z-index: 13;
+}
+
+.column .card:nth-child(4), .column .ghost:nth-child(4) {
+  top: 75px;
+  z-index: 14;
+}
+
+.column .card:nth-child(5), .column .ghost:nth-child(5) {
+  top: 100px;
+  z-index: 15;
+}
+
+.column .card:nth-child(6), .column .ghost:nth-child(6) {
+  top: 125px;
+  z-index: 16;
+}
+
+.column .card:nth-child(7), .column .ghost:nth-child(7) {
+  top: 150px;
+  z-index: 17;
+}
+
+.column .card:nth-child(8), .column .ghost:nth-child(8) {
+  top: 175px;
+  z-index: 18;
+}
+
+.column .card:nth-child(9), .column .ghost:nth-child(9) {
+  top: 200px;
+  z-index: 19;
+}
+
+.column .card:nth-child(10), .column .ghost:nth-child(10) {
+  top: 225px;
+  z-index: 20;
+}
+
+.column .card:nth-child(11), .column .ghost:nth-child(11) {
+  top: 250px;
+  z-index: 21;
+}
+
+.column .card:nth-child(12), .column .ghost:nth-child(12) {
+  top: 275px;
+  z-index: 22;
+}
+
+.column .card:nth-child(13), .column .ghost:nth-child(13) {
+  top: 300px;
+  z-index: 23;
+}
+
+.column .card:nth-child(14), .column .ghost:nth-child(14) {
+  top: 325px;
+  z-index: 24;
+}
+
+.column .card:nth-child(15), .column .ghost:nth-child(15) {
+  top: 350px;
+  z-index: 25;
+}
+
+.column .card:nth-child(16), .column .ghost:nth-child(16) {
+  top: 375px;
+  z-index: 26;
+}
+
+.column .card:nth-child(17), .column .ghost:nth-child(17) {
+  top: 400px;
+  z-index: 27;
+}
+
+.column .card:nth-child(18), .column .ghost:nth-child(18) {
+  top: 425px;
+  z-index: 28;
+}
+
+.column .card:nth-child(19), .column .ghost:nth-child(19) {
+  top: 450px;
+  z-index: 29;
+}
+
+.column .card:nth-child(20), .column .ghost:nth-child(20) {
+  top: 475px;
+  z-index: 30;
+}
+
+.pack, .dealt {
+  position: relative;
+  width: 125px;
+  height: 187.5px;
+  float: left;
+}
+
+.stack {
+  width: 125px;
+  height: 187.5px;
+  border-radius: 6.25px;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.dealer,
+.stacks {
+  float: left;
+}
+
+.dealer {
+  width: 30%;
+  text-align: left;
+}
+
+.stacks {
+  width: 70%;
+  text-align: right;
+}
+
+.pack, .dealt, .stack, .column {
+  background-color: rgba(0, 0, 0, 0.3);
+  margin: 0 10px 10px 0;
+  border-radius: 6.25px;
+}
+
+/* THE CARDS */
+.card {
+  width: 125px;
+  height: 187.5px;
+  border: 2px solid #2c3e50;
+  border-radius: 6.25px;
+  position: relative;
+  display: inline-block;
+  position: absolute;
+  background-color: #fff;
+  cursor: pointer;
+  left: 0;
+  top: 0;
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+
+.column .card.flipped {
+  box-shadow: 0 0 20px -5px #000;
+}
+
+.card, .card * {
+  pointer-events: none;
+}
+
+.dealt .card {
+  pointer-events: none;
+}
+
+.dealt .card:last-child, .column .card.flipped, .stack .card.flipped:last-child {
+  pointer-events: inherit;
+}
+
+.card {
+  transform-style: preserve-3d;
+  transition: transform 250ms, z-index 250ms step-end;
+}
+
+.dealer.dealing .card {
+  transition: transform 250ms;
+}
+
+.card > div {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  border-radius: 6.25px;
+}
+
+.card .rear {
+  background-color: #fff;
+  background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/back.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 82% 88%;
+  transform: rotateY(180deg);
+}
+
+.card.flipped {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+.card::after, .column::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  content: "";
+  opacity: 0;
+  transition: opacity 250ms;
+  pointer-events: none;
+}
+
+.card::before {
+  pointer-events: none;
+}
+
+.column.hint {
+  box-shadow: 0 0 0px 5px #fff inset;
+}
+
+.card.hint {
+  transform: scale(1.05, 1.05);
+}
+
+.column.over.empty::before, .column.over > .card:not(.dragging):last-child::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.2);
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 6.25px;
+  z-index: 100;
+  border: 2px dashed #fff;
+  box-sizing: border-box;
+}
+.column.over > .card:not(.dragging):last-child::before {
+  top: 25px;
+}
+
+.card.dragging {
+  z-index: 1000 !important;
+  box-shadow: 0 0 20px -5px #000;
+  transition: z-index 250ms step-start;
+  transform: scale(1.05, 1.05);
+}
+
+.card .value {
+  position: absolute;
+  font-size: 19.2307692308px;
+  width: 19.2307692308px;
+  height: 41.6666666667px;
+  text-align: center;
+}
+
+.card .value::after {
+  position: absolute;
+  font-size: 20.8333333333px;
+}
+
+.card .value:nth-child(1) {
+  top: 0px;
+  left: 0px;
+}
+
+.card .value:nth-child(2) {
+  bottom: 0px;
+  right: 0px;
+  transform: rotate(180deg);
+}
+
+.card .value:nth-child(1)::after,
+.card .value:nth-child(2)::after {
+  position: absolute;
+  top: 15.625px;
+  left: 50%;
+  transform: translate3d(-50%, 0px, 0px);
+}
+
+.hearts,
+.diamonds {
+  color: #c0392b;
+}
+
+.clubs,
+.spades {
+  color: #2c3e50;
+}
+
+.hearts .value::after,
+.hearts span::after {
+  content: "♥";
+}
+
+.diamonds .value::after,
+.diamonds span::after {
+  content: "♦";
+}
+
+.clubs .value::after,
+.clubs span::after {
+  content: "♣";
+}
+
+.spades .value::after,
+.spades span::after {
+  content: "♠";
+}
+
+/* Center symbol positions */
+.middle {
+  height: 85%;
+  left: 7.5%;
+  position: absolute;
+  top: 7.5%;
+  width: 85%;
+}
+
+.middle span {
+  position: absolute;
+  display: block;
+  height: 31.25px;
+  width: 31.25px;
+}
+
+.middle span::after {
+  font-size: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: -6.25px;
+}
+
+.picture .middle {
+  height: 80%;
+  left: 16%;
+  top: 10%;
+  width: 68%;
+  border: 1px solid #999;
+  background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/86186/cards.jpg);
+  background-size: 256.25px 600px;
+}
+
+.diamonds.card-J .middle {
+  background-position: 0px -450px;
+}
+
+.hearts.card-J .middle {
+  background-position: 0px -150px;
+}
+
+.clubs.card-J .middle {
+  background-position: 0px 0px;
+}
+
+.spades.card-J .middle {
+  background-position: 0px -300px;
+}
+
+.diamonds.card-Q .middle {
+  background-position: -86px -450px;
+}
+
+.hearts.card-Q .middle {
+  background-position: -86px -150px;
+}
+
+.clubs.card-Q .middle {
+  background-position: -86px 0px;
+}
+
+.spades.card-Q .middle {
+  background-position: -86px -300px;
+}
+
+.diamonds.card-K .middle {
+  background-position: -170px -450px;
+}
+
+.hearts.card-K .middle {
+  background-position: -170px -150px;
+}
+
+.clubs.card-K .middle {
+  background-position: -170px 0px;
+}
+
+.spades.card-K .middle {
+  background-position: -170px -300px;
+}
+
+/* no clicky on child elements */
+/* ACE */
+.card-1 .middle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 62.5px;
+}
+
+.card-1 .middle span {
+  position: relative;
+  height: 62.5px;
+  width: 62.5px;
+}
+
+.card-1 .middle span::after {
+  font-size: 62.5px;
+}
+
+/* TWO */
+.card-2 .middle span {
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.card-2 .middle span:nth-child(1) {
+  top: 0;
+}
+
+.card-2 .middle span:nth-child(2) {
+  bottom: 0;
+}
+
+.card-2 .middle span:nth-child(2) {
+  transform: rotate(180deg);
+  transform-origin: 25% 50% 0;
+}
+
+/* THREEE */
+.card-3 .middle span {
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+}
+
+.card-3 .middle span:nth-child(1) {
+  top: 0;
+}
+
+.card-3 .middle span:nth-child(2) {
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.card-3 .middle span:nth-child(3) {
+  bottom: 0;
+}
+
+.card-3 .middle span:nth-child(3) {
+  transform: rotate(180deg);
+  transform-origin: 25% 50% 0;
+}
+
+/* FOUR */
+.card-4 .middle span:nth-child(1),
+.card-4 .middle span:nth-child(3) {
+  left: 12.5px;
+}
+
+.card-4 .middle span:nth-child(2),
+.card-4 .middle span:nth-child(4) {
+  right: 12.5px;
+}
+
+.card-4 .middle span:nth-child(1),
+.card-4 .middle span:nth-child(2) {
+  top: 0;
+}
+
+.card-4 .middle span:nth-child(3),
+.card-4 .middle span:nth-child(4) {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+/* FIVE */
+.card-5 .middle span:nth-child(1),
+.card-5 .middle span:nth-child(3) {
+  left: 12.5px;
+}
+
+.card-5 .middle span:nth-child(2),
+.card-5 .middle span:nth-child(4) {
+  right: 12.5px;
+}
+
+.card-5 .middle span:nth-child(1),
+.card-5 .middle span:nth-child(2) {
+  top: 0;
+}
+
+.card-5 .middle span:nth-child(3),
+.card-5 .middle span:nth-child(4) {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+.card-5 .middle span:nth-child(5) {
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+/* SIX */
+.card-6 .middle span:nth-child(1),
+.card-6 .middle span:nth-child(3),
+.card-6 .middle span:nth-child(5) {
+  left: 12.5px;
+}
+
+.card-6 .middle span:nth-child(2),
+.card-6 .middle span:nth-child(4),
+.card-6 .middle span:nth-child(6) {
+  right: 12.5px;
+}
+
+.card-6 .middle span:nth-child(1),
+.card-6 .middle span:nth-child(2) {
+  top: 0;
+}
+
+.card-6 .middle span:nth-child(5),
+.card-6 .middle span:nth-child(6) {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+.card-6 .middle span:nth-child(3),
+.card-6 .middle span:nth-child(4) {
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+}
+
+/* SEVEN */
+.card-7 .middle span:nth-child(1),
+.card-7 .middle span:nth-child(3),
+.card-7 .middle span:nth-child(5) {
+  left: 12.5px;
+}
+
+.card-7 .middle span:nth-child(2),
+.card-7 .middle span:nth-child(4),
+.card-7 .middle span:nth-child(6) {
+  right: 12.5px;
+}
+
+.card-7 .middle span:nth-child(1),
+.card-7 .middle span:nth-child(2) {
+  top: 0;
+}
+
+.card-7 .middle span:nth-child(5),
+.card-7 .middle span:nth-child(6) {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+.card-7 .middle span:nth-child(3),
+.card-7 .middle span:nth-child(4) {
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+}
+
+.card-7 .middle span:nth-child(7) {
+  top: 25%;
+  left: 50%;
+  transform: translate3d(-50%, -25%, 0);
+}
+
+/* EIGHT */
+.card-8 .middle span:nth-child(1),
+.card-8 .middle span:nth-child(3),
+.card-8 .middle span:nth-child(5) {
+  left: 12.5px;
+}
+
+.card-8 .middle span:nth-child(2),
+.card-8 .middle span:nth-child(4),
+.card-8 .middle span:nth-child(6) {
+  right: 12.5px;
+}
+
+.card-8 .middle span:nth-child(1),
+.card-8 .middle span:nth-child(2) {
+  top: 0;
+}
+
+.card-8 .middle span:nth-child(5),
+.card-8 .middle span:nth-child(6) {
+  bottom: 0;
+  transform: rotate(180deg);
+}
+
+.card-8 .middle span:nth-child(3),
+.card-8 .middle span:nth-child(4) {
+  top: 50%;
+  transform: translate3d(0, -50%, 0);
+}
+
+.card-8 .middle span:nth-child(7) {
+  top: 25%;
+  left: 50%;
+  transform: translate3d(-50%, -25%, 0);
+}
+
+.card-8 .middle span:nth-child(8) {
+  top: 75%;
+  left: 50%;
+  transform: translate3d(-50%, -75%, 0) rotate(180deg);
+}
+
+/* NINE */
+.card-9 .middle span:nth-child(1),
+.card-9 .middle span:nth-child(3),
+.card-9 .middle span:nth-child(5),
+.card-9 .middle span:nth-child(7) {
+  left: 12.5px;
+}
+
+.card-9 .middle span:nth-child(2),
+.card-9 .middle span:nth-child(4),
+.card-9 .middle span:nth-child(6),
+.card-9 .middle span:nth-child(8) {
+  right: 12.5px;
+}
+
+.card-9 .middle span:nth-child(1),
+.card-9 .middle span:nth-child(2) {
+  top: 0;
+}
+
+.card-9 .middle span:nth-child(3),
+.card-9 .middle span:nth-child(4) {
+  top: 25%;
+}
+
+.card-9 .middle span:nth-child(5),
+.card-9 .middle span:nth-child(6) {
+  bottom: 25%;
+}
+
+.card-9 .middle span:nth-child(7),
+.card-9 .middle span:nth-child(8) {
+  bottom: 0;
+}
+
+.card-9 .middle span:nth-child(5),
+.card-9 .middle span:nth-child(6),
+.card-9 .middle span:nth-child(7),
+.card-9 .middle span:nth-child(8) {
+  transform: rotate(180deg);
+}
+
+.card-9 .middle span:nth-child(9) {
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+/* TEN */
+.card-10 .middle span:nth-child(1),
+.card-10 .middle span:nth-child(3),
+.card-10 .middle span:nth-child(5),
+.card-10 .middle span:nth-child(7) {
+  left: 12.5px;
+}
+
+.card-10 .middle span:nth-child(2),
+.card-10 .middle span:nth-child(4),
+.card-10 .middle span:nth-child(6),
+.card-10 .middle span:nth-child(8) {
+  right: 12.5px;
+}
+
+.card-10 .middle span:nth-child(1),
+.card-10 .middle span:nth-child(2) {
+  top: 0;
+}
+
+.card-10 .middle span:nth-child(3),
+.card-10 .middle span:nth-child(4) {
+  top: 25%;
+}
+
+.card-10 .middle span:nth-child(5),
+.card-10 .middle span:nth-child(6) {
+  bottom: 25%;
+}
+
+.card-10 .middle span:nth-child(7),
+.card-10 .middle span:nth-child(8) {
+  bottom: 0;
+}
+
+.card-10 .middle span:nth-child(5),
+.card-10 .middle span:nth-child(6),
+.card-10 .middle span:nth-child(7),
+.card-10 .middle span:nth-child(8) {
+  transform: rotate(180deg);
+}
+
+.card-10 .middle span:nth-child(9) {
+  left: 50%;
+  top: 16.6667%;
+  transform: translate3d(-50%, -16.6667%, 0);
+}
+
+.card-10 .middle span:nth-child(10) {
+  left: 50%;
+  bottom: 16.6667%;
+  transform: translate3d(-50%, 16.6667%, 0) rotate(180deg);
+}
